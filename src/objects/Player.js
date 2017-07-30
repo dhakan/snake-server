@@ -8,7 +8,7 @@ class Player {
         this._id = id;
         this._color = color;
         this._bodyParts = [];
-        this._direction = settings.playerActions.RIGHT;
+        this._direction = null;
         this._alive = true;
         this._grid = null;
         this._ready = false;
@@ -76,7 +76,7 @@ class Player {
     }
 
     set ready(newValue) {
-        this._ready = newValue
+        this._ready = newValue;
     }
 
     get playing() {
@@ -84,7 +84,11 @@ class Player {
     }
 
     set playing(newValue) {
-        this._playing = newValue
+        this._playing = newValue;
+    }
+
+    get idle() {
+        return !this._direction;
     }
 
     get serialized() {
@@ -194,7 +198,7 @@ class Player {
 
     expandBody(position) {
         const type = (!this._bodyParts.length && BodyPart.HEAD) || BodyPart.BODY;
-        const newBodyPart = new BodyPart(position, type);
+        const newBodyPart = new BodyPart(position, type, this);
 
         this._bodyParts.push(newBodyPart);
 
@@ -230,11 +234,11 @@ class Player {
 
     reset() {
         this._bodyParts = [];
-        this._direction = settings.playerActions.RIGHT;
         this._alive = true;
         this._grid = null;
         this._playing = false;
         this._bodyPartsYetToBeBuilt = 0;
+        this._direction = null;
     }
 }
 

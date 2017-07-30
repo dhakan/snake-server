@@ -15,6 +15,10 @@ class ChangeDirectionAction extends Action {
     }
 
     get isValid() {
+        if (this._player.idle) {
+            return true;
+        }
+
         const actionIsOpposite = (this._player.direction.value === settings.playerActions[this._direction.value].disallowed);
 
         return !actionIsOpposite;
