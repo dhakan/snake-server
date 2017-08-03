@@ -202,7 +202,7 @@ class GameRound extends EventEmitter {
     }
 
     _movePlayers() {
-        for (const player of Array.from(this._players.values()).filter(player => player.alive)) {
+        for (const player of Array.from(this._players.values()).filter(player => player.alive && !player.idle)) {
             player.move();
         }
     }
@@ -241,7 +241,7 @@ class GameRound extends EventEmitter {
 
         function detectPlayerWithWorldBoundsCollision() {
             // Player to world bounds collision
-            for (const player of Array.from(this._players.values()).filter(player => player.alive)) {
+            for (const player of Array.from(this._players.values()).filter(player => player.alive && !player.idle)) {
                 const collision = this._collisionHandler.playerWithWorldBoundsCollision(player);
 
                 if (collision) {
@@ -251,7 +251,7 @@ class GameRound extends EventEmitter {
         }
 
         function detectPlayerWithGameObjectCollision() {
-            for (const player of Array.from(this._players.values()).filter(player => player.alive)) {
+            for (const player of Array.from(this._players.values()).filter(player => player.alive && !player.idle)) {
                 const collision = this._collisionHandler.playerWithGameObjectCollision(player);
 
                 if (!collision) {

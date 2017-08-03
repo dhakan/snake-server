@@ -14,7 +14,7 @@ class InverseDirectionAction extends Action {
     }
 
     get isValid() {
-        return true;
+        return !this._player.idle;
     }
 
     _getNewDirectionWhenDividedByWalls(tail, tailMinusOne) {
