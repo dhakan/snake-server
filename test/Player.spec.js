@@ -45,13 +45,9 @@ describe('Player', () => {
     });
 
     describe('expand body', () => {
-
-        /* TODO not happy having to declare beforeEach here, since there is only one it block */
-        beforeEach(() => {
-            this.player = createPlayer(0);
-        });
-
         it('should expand the number of body parts', () => {
+            this.player = createPlayer(0);
+
             expect(this.player.bodyParts.length).to.equal(0);
 
             this.player.expandBody(settings.startPositions[0]);
@@ -84,6 +80,35 @@ describe('Player', () => {
 
             expect(this.player.alive).to.equal(false);
             expect(this.player.bodyParts.length).to.equal(0);
+        });
+    });
+
+    describe('body parts stashed to be built when moved', () => {
+
+        beforeEach(() => {
+            this.player.direction = settings.playerActions.UP;
+            this.player.bodyPartsYetToBeBuilt = 1;
+        });
+
+        it('should expand the player body parts upon moving player', () => {
+            expect(this.player.bodyParts.length).to.equal(2);
+            expect(this.player._bodyPartsYetToBeBuilt).to.equal(1);
+
+            this.player.move();
+
+            expect(this.player.bodyParts.length).to.equal(3);
+        });
+
+        it('should expand the player with only one body part per move', () => {
+            this.player.bodyPartsYetToBeBuilt = 1;
+
+            this.player.move();
+
+            expect(this.player.bodyParts.length).to.equal(3);
+
+            this.player.move();
+
+            expect(this.player.bodyParts.length).to.equal(4);
         });
     });
 });
