@@ -6,7 +6,7 @@
   "scripts": {
     "start": "forever src/index.js",
     "dev": "nodemon $NODE_DEBUG_OPTION src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "lint": "standard"
   },
   "repository": {
@@ -24,6 +24,9 @@
   },
   "devDependencies": {
     "nodemon": "1.11.0",
-    "standard": "10.0.3"
+    "standard": "10.0.3",
+    "chai": "4.1.1",
+    "mocha": "3.5.0",
+    "nodemon": "1.11.0"
   }
 }

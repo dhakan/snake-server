@@ -3,13 +3,13 @@ const BodyPart = require('./BodyPart')
 const PlayerColor = require('./PlayerColor')
 
 class Player {
-  constructor (id, color) {
-    this._id = id
-    this._color = color
+  constructor (config) {
+    this._id = config.id
+    this._color = config.color
     this._bodyParts = []
-    this._direction = null
+    this._direction = config.direction
     this._alive = true
-    this._grid = null
+    this._grid = config.grid
     this._ready = false
     this._playing = false
     this._bodyPartsYetToBeBuilt = 0
@@ -65,9 +65,9 @@ class Player {
 
   get isOutsideOfBounds () {
     return this.isLeftOfBounds ||
-            this.isRightOfBounds ||
-            this.isAboveBounds ||
-            this.isBelowBounds
+      this.isRightOfBounds ||
+      this.isAboveBounds ||
+      this.isBelowBounds
   }
 
   get ready () {
@@ -217,6 +217,10 @@ class Player {
   }
 
   move () {
+    if (!this._direction) {
+      return
+    }
+
     let tailOldPosition = null
 
     if (this._bodyParts.length === 1) {

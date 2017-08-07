@@ -27,7 +27,7 @@ class Room {
     const state = {
       id: this.id,
       players: Array.from(this._players.values())
-                .map(player => player.serialized)
+        .map(player => player.serialized)
     }
 
     return state
@@ -44,7 +44,7 @@ class Room {
   _onClientLoaded (id) {
     this._players.get(id).ready = true
 
-        // TODO don't emit this to clients currently playing, as the newly connected player has no position
+    // TODO don't emit this to clients currently playing, as the newly connected player has no position
     this._emitRoomState()
 
     this._handleCreateGameRound()
@@ -64,7 +64,7 @@ class Room {
     if (numberOfPlayersRequiredAreEnough && allPlayersLoaded && gameRoundIsNotRunning) {
       this._gameRound = new GameRound(this._networkHandler, this._players)
       this._gameRound.once(GameRound.events.WINNER_DECIDED, winners => {
-                // TODO change this recursive behaviour(it never ends)
+        // TODO change this recursive behaviour(it never ends)
         this._handleCreateGameRound()
       })
     }
@@ -85,9 +85,10 @@ class Room {
   _addPlayer (id) {
     const freeColors = Player.colors.filter(color => !color.occupied)
     const randomColor = freeColors[Math.floor(Math.random() * freeColors.length)]
-    const player = new Player(id, randomColor)
-
-    randomColor.occupied = true
+    const player = new Player({
+      id: id,
+      color: randomColor,
+    })
 
     this._players.set(id, player)
 
