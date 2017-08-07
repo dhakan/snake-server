@@ -193,6 +193,7 @@ class Player {
   kill () {
     this._alive = false
     this._bodyParts.forEach(bodyPart => this._grid.removeObjectFromGrid(bodyPart))
+    this._bodyParts = []
   }
 
   expandBody (position) {
