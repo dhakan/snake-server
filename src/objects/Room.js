@@ -14,9 +14,9 @@ class Room {
 
     this._networkHandler = networkHandler
 
-    this._networkHandler.on(NetworkHandler.events.CONNECT, this._onPlayerConnected.bind(this))
-    this._networkHandler.on(NetworkHandler.events.CLIENT_LOADED, this._onClientLoaded.bind(this))
-    this._networkHandler.on(NetworkHandler.events.DISCONNECT, this._onPlayerDisconnected.bind(this))
+    if (this._networkHandler) {
+      this._attachNetworkListeners()
+    }
   }
 
   get id () {
@@ -31,6 +31,12 @@ class Room {
     }
 
     return state
+  }
+
+  _attachNetworkListeners () {
+    this._networkHandler.on(NetworkHandler.events.CONNECT, this._onPlayerConnected.bind(this))
+    this._networkHandler.on(NetworkHandler.events.CLIENT_LOADED, this._onClientLoaded.bind(this))
+    this._networkHandler.on(NetworkHandler.events.DISCONNECT, this._onPlayerDisconnected.bind(this))
   }
 
   _emitRoomState () {
