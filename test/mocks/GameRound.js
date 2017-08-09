@@ -1,9 +1,13 @@
 class GameRound {
-  constructor () {
+  constructor () {}
 
+  get isCountingDown () {
+    return true
   }
 
-  once() {}
+  once () {}
+
+  stop () {}
 }
 
 module.exports = GameRound

@@ -1,22 +1,29 @@
 const chai = require('chai')
 const expect = chai.expect
+const sinon = require('sinon')
 const proxyquire = require('proxyquire')
 
-const GameRoundMock = proxyquire('../src/objects/Room', {'./GameRound': require('./mocks/GameRound')})
+const GameRoundMock = require('./mocks/GameRound')
 
 const settings = require('../src/utils/settings')
-const Room = require('../src/objects/Room')
-const GameRound = require('../src/objects/GameRound')
-const Player = require('../src/objects/Player')
+const Room = proxyquire('../src/objects/Room', {'./GameRound': GameRoundMock})
 
 describe('Room', () => {
 
-  beforeEach(() => {
-    settings.REQUIRED_NUMBER_OF_PLAYERS_FOR_GAME_ROUND = 2
-    this.room = new Room()
-  })
-
   describe('create game round', () => {
+
+    beforeEach(() => {
+      settings.REQUIRED_NUMBER_OF_PLAYERS_FOR_GAME_ROUND = 2
+      this.room = new Room()
+    })
+
+    // TODO fix this stupid solution, player color should not be an issue when testing the room
+    afterEach(() => {
+      for (player of Array.from(this.room._players.values())) {
+        player.color.occupied = false
+      }
+    })
+
     it('should not create game round when there are not enough players', () => {
       this.room._handleCreateGameRound()
 
@@ -45,6 +52,22 @@ describe('Room', () => {
       this.room._handleCreateGameRound()
 
       expect(this.room._gameRound).to.not.equal(null)
+    })
+
+    it('should stop game round counting down upon creating a new one', () => {
+      this.room._gameRound = new GameRoundMock()
+
+      sinon.spy(GameRoundMock.prototype, 'stop')
+
+      const player = this.room._addPlayer('test-id')
+      const player2 = this.room._addPlayer('test-id-2')
+
+      player.ready = true
+      player2.ready = true
+
+      this.room._handleCreateGameRound()
+
+      expect(GameRoundMock.prototype.stop.called).to.equal(true)
     })
   })
 })
