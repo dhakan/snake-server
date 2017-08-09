@@ -69,5 +69,21 @@ describe('Room', () => {
 
       expect(GameRoundMock.prototype.stop.called).to.equal(true)
     })
+
+    it('should not create a new game round when another one is running', () => {
+      this.room._gameRound = new GameRoundMock()
+
+      const player = this.room._addPlayer('test-id')
+      const player2 = this.room._addPlayer('test-id-2')
+
+      player.ready = true
+      player2.ready = true
+
+      const runningGameRound = this.room._gameRound
+
+      this.room._handleCreateGameRound()
+
+      expect(this.room._gameRound).to.equal(runningGameRound)
+    })
   })
 })

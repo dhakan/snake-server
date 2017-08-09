@@ -5,6 +5,10 @@ class GameRound {
     return true
   }
 
+  get isRunning () {
+    return true
+  }
+
   once () {}
 
   stop () {}
