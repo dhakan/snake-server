@@ -1,6 +1,8 @@
 const chai = require('chai')
-const sinon = require('sinon')
 const expect = chai.expect
+const proxyquire = require('proxyquire')
+
+const GameRoundMock = proxyquire('../src/objects/Room', {'./GameRound': require('./mocks/GameRound')})
 
 const settings = require('../src/utils/settings')
 const Room = require('../src/objects/Room')
