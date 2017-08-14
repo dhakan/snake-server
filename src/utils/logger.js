@@ -1,7 +1,7 @@
-const winston = require('winston');
-const LOG_LEVEL = process.env.LOG_LEVEL || 'debug';
+const winston = require('winston')
+const LOG_LEVEL = process.env.LOG_LEVEL || 'debug'
 
-const tsFormat = () => (new Date()).toLocaleTimeString();
+const tsFormat = () => (new Date()).toLocaleTimeString()
 
 const logger = new (winston.Logger)({
   transports: [
@@ -14,6 +14,6 @@ const logger = new (winston.Logger)({
       timestamp: tsFormat
     })
   ]
-});
+})
 
-module.exports = logger;
+module.exports = logger
