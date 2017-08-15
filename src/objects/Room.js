@@ -93,7 +93,7 @@ class Room {
     const randomColor = freeColors[Math.floor(Math.random() * freeColors.length)]
     const player = new Player({
       id: id,
-      color: randomColor,
+      color: randomColor
     })
 
     this._players.set(id, player)

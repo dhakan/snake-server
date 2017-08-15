@@ -16,6 +16,11 @@
   },
   "author": "",
   "license": "ISC",
+  "standard": {
+    "env": [
+      "mocha"
+    ]
+  },
   "dependencies": {
     "express": "^4.14.0",
     "forever": "0.15.3",

@@ -1,6 +1,4 @@
 class GameRound {
-  constructor () {}
-
   get isCountingDown () {
     return true
   }
