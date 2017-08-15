@@ -8,7 +8,8 @@
     "dev": "nodemon $NODE_DEBUG_OPTION src/index.js",
     "test": "mocha",
     "lint": "standard",
-    "coverage": "istanbul cover node_modules/mocha/bin/_mocha"
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
+    "deploy": "deploy/script.sh"
   },
   "repository": {
     "type": "git",
