@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 npm test
 npm run lint
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
