@@ -96,6 +96,8 @@ class Room {
       color: randomColor
     })
 
+    randomColor.occupied = true
+
     this._players.set(id, player)
 
     return player
