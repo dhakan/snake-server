@@ -6,8 +6,10 @@
   "scripts": {
     "start": "forever src/index.js",
     "dev": "nodemon $NODE_DEBUG_OPTION src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "standard"
+    "test": "mocha",
+    "lint": "standard",
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha",
+    "deploy": "deploy/script.sh"
   },
   "repository": {
     "type": "git",
@@ -15,6 +17,11 @@
   },
   "author": "",
   "license": "ISC",
+  "standard": {
+    "env": [
+      "mocha"
+    ]
+  },
   "dependencies": {
     "express": "^4.14.0",
     "forever": "0.15.3",
@@ -24,6 +31,11 @@
   },
   "devDependencies": {
     "nodemon": "1.11.0",
-    "standard": "10.0.3"
+    "standard": "10.0.3",
+    "chai": "4.1.1",
+    "istanbul": "0.4.5",
+    "mocha": "3.5.0",
+    "proxyquire": "1.8.0",
+    "sinon": "3.1.0"
   }
 }

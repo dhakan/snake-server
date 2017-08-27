@@ -14,9 +14,9 @@ class Room {
 
     this._networkHandler = networkHandler
 
-    this._networkHandler.on(NetworkHandler.events.CONNECT, this._onPlayerConnected.bind(this))
-    this._networkHandler.on(NetworkHandler.events.CLIENT_LOADED, this._onClientLoaded.bind(this))
-    this._networkHandler.on(NetworkHandler.events.DISCONNECT, this._onPlayerDisconnected.bind(this))
+    if (this._networkHandler) {
+      this._attachNetworkListeners()
+    }
   }
 
   get id () {
@@ -27,10 +27,16 @@ class Room {
     const state = {
       id: this.id,
       players: Array.from(this._players.values())
-                .map(player => player.serialized)
+        .map(player => player.serialized)
     }
 
     return state
+  }
+
+  _attachNetworkListeners () {
+    this._networkHandler.on(NetworkHandler.events.CONNECT, this._onPlayerConnected.bind(this))
+    this._networkHandler.on(NetworkHandler.events.CLIENT_LOADED, this._onClientLoaded.bind(this))
+    this._networkHandler.on(NetworkHandler.events.DISCONNECT, this._onPlayerDisconnected.bind(this))
   }
 
   _emitRoomState () {
@@ -44,7 +50,7 @@ class Room {
   _onClientLoaded (id) {
     this._players.get(id).ready = true
 
-        // TODO don't emit this to clients currently playing, as the newly connected player has no position
+    // TODO don't emit this to clients currently playing, as the newly connected player has no position
     this._emitRoomState()
 
     this._handleCreateGameRound()
@@ -64,7 +70,7 @@ class Room {
     if (numberOfPlayersRequiredAreEnough && allPlayersLoaded && gameRoundIsNotRunning) {
       this._gameRound = new GameRound(this._networkHandler, this._players)
       this._gameRound.once(GameRound.events.WINNER_DECIDED, winners => {
-                // TODO change this recursive behaviour(it never ends)
+        // TODO change this recursive behaviour(it never ends)
         this._handleCreateGameRound()
       })
     }
@@ -85,7 +91,10 @@ class Room {
   _addPlayer (id) {
     const freeColors = Player.colors.filter(color => !color.occupied)
     const randomColor = freeColors[Math.floor(Math.random() * freeColors.length)]
-    const player = new Player(id, randomColor)
+    const player = new Player({
+      id: id,
+      color: randomColor
+    })
 
     randomColor.occupied = true
 
