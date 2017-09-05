@@ -1,12 +1,12 @@
 const BodyPart = require('../objects/BodyPart')
 
 class CollisionHandler {
-  constructor (gridHandler) {
-    this._gridHandler = gridHandler
+  constructor (grid) {
+    this._grid = grid
   }
 
   playerWithGameObjectCollision (player) {
-    const gridSquare = this._gridHandler.getGridSquare(player.head.position)
+    const gridSquare = this._grid.getGridSquare(player.head.position)
     let collision = gridSquare && gridSquare.occupied && gridSquare.getOtherGameObjects(player.head)
 
     for (const gameObject of collision) {
