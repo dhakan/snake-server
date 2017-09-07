@@ -4,15 +4,17 @@ const settings = require('../utils/settings')
 const NetworkHandler = require('../handler/NetworkHandler')
 const Player = require('./Player')
 const GameRound = require('./GameRound')
+const Course = require('./Course')
 
 class Room {
-  constructor (networkHandler) {
+  constructor (config) {
     this._id = uuid()
     this._players = new Map()
 
+    this._unloadedCourses = config.courses
     this._gameRound = null
 
-    this._networkHandler = networkHandler
+    this._networkHandler = config.networkHandler
 
     if (this._networkHandler) {
       this._attachNetworkListeners()
@@ -68,7 +70,11 @@ class Room {
     const gameRoundIsNotRunning = !(this._gameRound && this._gameRound.isRunning)
 
     if (numberOfPlayersRequiredAreEnough && allPlayersLoaded && gameRoundIsNotRunning) {
-      this._gameRound = new GameRound(this._networkHandler, this._players)
+      this._gameRound = new GameRound({
+        networkHandler: this._networkHandler,
+        players: this._players,
+        course: this._unloadedCourses[0],
+      })
       this._gameRound.once(GameRound.events.WINNER_DECIDED, winners => {
         // TODO change this recursive behaviour(it never ends)
         this._handleCreateGameRound()

@@ -6,21 +6,23 @@ const FruitHandler = require('../handler/FruitHandler')
 const CollisionHandler = require('../handler/CollisionHandler')
 const Grid = require('./Grid')
 const BodyPart = require('./BodyPart')
-const Fruit = require('./Fruit')
+const Course = require('./Course')
+const Wall = require('./Wall')
 const ChangeDirectionAction = require('../actions/ChangeDirectionAction')
 const InverseDirectionAction = require('../actions/InverseDirectionAction')
 
 const logger = require('../utils/logger')
 
 class GameRound extends EventEmitter {
-  constructor (networkHandler, players) {
+  constructor (config) {
     super()
     this._id = uuid()
-    this._networkHandler = networkHandler
-
-    this._players = new Map(players)
+    this._networkHandler = config.networkHandler
+    this._players = new Map(config.players)
 
     this._grid = new Grid()
+
+    this._course = new Course(config.course, this._grid)
     this._collisionHandler = new CollisionHandler(this._grid)
 
     this._actions = new Map()
@@ -48,7 +50,8 @@ class GameRound extends EventEmitter {
     const initialState = {
       id: this.id,
       players: Array.from(this._players.values())
-                .map(player => player.serialized)
+                .map(player => player.serialized),
+      walls: this._course.walls.map(wall => wall.serialized)
     }
 
     return initialState
@@ -123,6 +126,18 @@ class GameRound extends EventEmitter {
   }
 
   _initPlayers () {
+    for (const [index, player] of Array.from(this._players.values()).entries()) {
+      const position = (settings.startPositions[index] || this._grid.randomGridPosition)
+
+      this._actions.set(player.id, new Map())
+
+      player.playing = true
+      player.grid = this._grid
+      player.initBody(position)
+    }
+  }
+
+  _initCourse () {
     for (const [index, player] of Array.from(this._players.values()).entries()) {
       const position = (settings.startPositions[index] || this._grid.randomGridPosition)
 
@@ -248,6 +263,8 @@ class GameRound extends EventEmitter {
             player.bodyPartsYetToBeBuilt = gameObject.value
                         // Player to body part
           } else if (gameObject instanceof BodyPart) {
+            collidingPlayers.push(player)
+          } else if (gameObject instanceof Wall) {
             collidingPlayers.push(player)
           }
         }
