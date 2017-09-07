@@ -6,12 +6,14 @@ class FruitHandler {
     this._fruits = new Map()
   }
 
-  createFruit () {
+  spawnFruit () {
     const position = this._grid.randomGridPosition
     const fruit = new Fruit(position)
 
     this._fruits.set(fruit.id, fruit)
     this._grid.occupyGridSquare(fruit)
+
+    return fruit
   }
 
   removeFruit (fruit) {
