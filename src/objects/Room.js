@@ -4,7 +4,6 @@ const settings = require('../utils/settings')
 const NetworkHandler = require('../handler/NetworkHandler')
 const Player = require('./Player')
 const GameRound = require('./GameRound')
-const Course = require('./Course')
 
 class Room {
   constructor (config) {
@@ -12,9 +11,9 @@ class Room {
     this._players = new Map()
 
     this._unloadedCourses = config.courses
-    this._gameRound = null
-
     this._networkHandler = config.networkHandler
+
+    this._gameRound = null
 
     if (this._networkHandler) {
       this._attachNetworkListeners()
