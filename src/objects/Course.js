@@ -1,15 +1,16 @@
 const Wall = require('./Wall')
 
 class Course {
-  constructor (data, grid) {
-    this._grid = grid
+  constructor (config) {
+    this._settings = config.course.settings
+    this._grid = config.grid
     this._walls = []
 
-    this._initializeWalls(data)
+    this._initializeWalls(config.course)
   }
 
   _initializeWalls (data) {
-    for (const item of data) {
+    for (const item of data.walls) {
       const wall = new Wall({
         x: item.x,
         y: item.y
@@ -21,6 +22,14 @@ class Course {
 
   get walls () {
     return this._walls
+  }
+
+  get serialized () {
+    const obj = {
+      settings: this._settings,
+      walls: this._walls.map(wall => wall.serialized)
+    }
+    return obj
   }
 }
 

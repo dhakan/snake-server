@@ -23,7 +23,11 @@ class GameRound extends EventEmitter {
 
     this._grid = new Grid()
 
-    this._course = new Course(config.course, this._grid)
+    this._course = new Course({
+      course: config.course,
+      grid: this._grid
+    })
+
     this._collisionHandler = new CollisionHandler(this._grid)
 
     this._actions = new Map()
@@ -52,7 +56,7 @@ class GameRound extends EventEmitter {
       id: this.id,
       players: Array.from(this._players.values())
         .map(player => player.serialized),
-      walls: this._course.walls.map(wall => wall.serialized)
+      course: this._course.serialized
     }
 
     return initialState
