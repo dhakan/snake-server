@@ -34,6 +34,13 @@ class Room {
     return state
   }
 
+  get randomCourse () {
+    const randomIndex = Math.floor(Math.random() * this._unloadedCourses.length)
+    const course = this._unloadedCourses[randomIndex]
+
+    return course
+  }
+
   _attachNetworkListeners () {
     this._networkHandler.on(NetworkHandler.events.CONNECT, this._onPlayerConnected.bind(this))
     this._networkHandler.on(NetworkHandler.events.CLIENT_LOADED, this._onClientLoaded.bind(this))
@@ -72,7 +79,7 @@ class Room {
       this._gameRound = new GameRound({
         networkHandler: this._networkHandler,
         players: this._players,
-        course: this._unloadedCourses[0]
+        course: this.randomCourse
       })
       this._gameRound.once(GameRound.events.WINNER_DECIDED, winners => {
         // TODO change this recursive behaviour(it never ends)
