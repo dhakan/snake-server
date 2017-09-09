@@ -6,18 +6,18 @@ const io = require('socket.io')(server)
 const NetworkHandler = require('./handler/NetworkHandler')
 const Room = require('./objects/Room')
 
+const PORT = process.env.PORT || 3000
+
 loadCourses()
   .then(courses => {
-    const PORT = process.env.PORT || 3000
     const networkHandler = new NetworkHandler(io)
-    const room = new Room({
+    const room = new Room({ // eslint-disable-line no-unused-vars
       networkHandler: networkHandler,
-      courses: courses,
-    }) // eslint-disable-line no-unused-vars
+      courses: courses
+    })
 
     server.listen(PORT)
   })
   .catch(error => {
     throw error
   })
-

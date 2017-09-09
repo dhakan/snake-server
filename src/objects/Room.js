@@ -72,7 +72,7 @@ class Room {
       this._gameRound = new GameRound({
         networkHandler: this._networkHandler,
         players: this._players,
-        course: this._unloadedCourses[0],
+        course: this._unloadedCourses[0]
       })
       this._gameRound.once(GameRound.events.WINNER_DECIDED, winners => {
         // TODO change this recursive behaviour(it never ends)

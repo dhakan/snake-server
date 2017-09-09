@@ -12,7 +12,7 @@ class Course {
     for (const item of data) {
       const wall = new Wall({
         x: item.x,
-        y: item.y,
+        y: item.y
       })
       this._walls.push(wall)
       this._grid.occupyGridSquare(wall)

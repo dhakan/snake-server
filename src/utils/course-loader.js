@@ -15,4 +15,3 @@ const loadCourses = () => {
 }
 
 module.exports = loadCourses
-

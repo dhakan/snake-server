@@ -9,5 +9,5 @@ const RoomFactory = Factory.define('room', Room)
   .attr('networkHandler', new MockNetworkHandler())
 
 module.exports = {
-  RoomFactory,
+  RoomFactory
 }
