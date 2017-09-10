@@ -141,7 +141,7 @@ class GameRound extends EventEmitter {
 
     this._addListeners()
 
-    this._fruitHandler.spawnFruit()
+    // this._fruitHandler.spawnFruit()
 
     this._gameLoopTimerId = setInterval(() => {
       this._handleExecuteActions()
@@ -247,8 +247,8 @@ class GameRound extends EventEmitter {
                     // Player to fruit
           if (gameObject instanceof Fruit) {
             this._fruitHandler.removeFruit(gameObject)
-            this._fruitHandler.spawnFruit()
-            player.bodyPartsYetToBeBuilt = 1
+            // this._fruitHandler.spawnFruit()
+            player.bodyPartsYetToBeBuilt = gameObject.value
                         // Player to body part
           } else if (gameObject instanceof BodyPart) {
             collidingPlayers.push(player)

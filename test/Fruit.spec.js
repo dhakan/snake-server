@@ -27,7 +27,7 @@ describe('Fruit', () => {
     })
   })
 
-  describe('spawnFruit', () => {
+  describe('removeFruit', () => {
     it('should create a new fruit and then remove it', () => {
 
       const fruit = this.fruitHandler.spawnFruit()

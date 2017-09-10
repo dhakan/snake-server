@@ -1,9 +1,19 @@
 const Fruit = require('../objects/Fruit')
+const settings = require('../utils/settings')
 
 class FruitHandler {
   constructor (grid) {
     this._grid = grid
     this._fruits = new Map()
+    this._maximumConcurrentFruits = settings.MAXIMUM_CONCURRENT_FRUITS
+
+    let intervalId = setInterval(() => {
+
+      if (this.length < this._maximumConcurrentFruits) {
+        this.spawnFruit()
+      }
+
+    }, settings.FRUIT_SPAWN_INTERVAL)
   }
 
   spawnFruit () {
@@ -23,6 +33,10 @@ class FruitHandler {
 
   get fruits () {
     return this._fruits
+  }
+
+  get length () {
+    return this._fruits.size
   }
 
 }
