@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "backgroundColor": "#A5E9DB",
+    "world": {
+      "width": 400,
+      "height": 200
+    },
+    "startPositions": []
+  },
+  "walls": []
+}

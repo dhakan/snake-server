@@ -1,9 +1,14 @@
+const CollisionHandler = require('../handler/CollisionHandler')
+const Grid = require('./Grid')
 const Wall = require('./Wall')
 
 class Course {
   constructor (config) {
     this._settings = config.course.settings
-    this._grid = config.grid
+    this._grid = new Grid({
+      settings: this._settings
+    })
+    this._collisionHandler = new CollisionHandler(this._grid)
     this._walls = []
 
     this._initializeWalls(config.course)
@@ -20,8 +25,16 @@ class Course {
     }
   }
 
+  get settings () {
+    return this._settings
+  }
+
   get walls () {
     return this._walls
+  }
+
+  get randomGridPosition () {
+    return this._grid.randomGridPosition
   }
 
   get serialized () {
@@ -30,6 +43,26 @@ class Course {
       walls: this._walls.map(wall => wall.serialized)
     }
     return obj
+  }
+
+  getStartPosition (playerIndex) {
+    return this._settings.startPositions[playerIndex] || this.randomGridPosition
+  }
+
+  occupyGridSquare (gameObject) {
+    this._grid.occupyGridSquare(gameObject)
+  }
+
+  removeObjectFromGrid (gameObject) {
+    this._grid.removeObjectFromGrid(gameObject)
+  }
+
+  playerWithGameObjectCollision (player) {
+    return this._collisionHandler.playerWithGameObjectCollision(player)
+  }
+
+  playerWithWorldBoundsCollision (player) {
+    return this._collisionHandler.playerWithWorldBoundsCollision(player)
   }
 }
 

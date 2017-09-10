@@ -3,8 +3,8 @@ const EventEmitter = require('events').EventEmitter
 const settings = require('../utils/settings')
 const NetworkHandler = require('../handler/NetworkHandler')
 const FruitHandler = require('../handler/FruitHandler')
-const CollisionHandler = require('../handler/CollisionHandler')
-const Grid = require('./Grid')
+// const CollisionHandler = require('../handler/CollisionHandler')
+// const Grid = require('./Grid')
 const BodyPart = require('./BodyPart')
 const Course = require('./Course')
 const Wall = require('./Wall')
@@ -21,14 +21,9 @@ class GameRound extends EventEmitter {
     this._networkHandler = config.networkHandler
     this._players = new Map(config.players)
 
-    this._grid = new Grid()
-
     this._course = new Course({
-      course: config.course,
-      grid: this._grid
+      course: config.course
     })
-
-    this._collisionHandler = new CollisionHandler(this._grid)
 
     this._actions = new Map()
     this._fruitHandler = new FruitHandler(this._grid)
@@ -133,24 +128,13 @@ class GameRound extends EventEmitter {
 
   _initPlayers () {
     for (const [index, player] of Array.from(this._players.values()).entries()) {
-      const position = (settings.startPositions[index] || this._grid.randomGridPosition)
+      // const position = (settings.startPositions[index] || this._course.randomGridPosition)
+      const position = this._course.getStartPosition(index)
 
       this._actions.set(player.id, new Map())
 
       player.playing = true
-      player.grid = this._grid
-      player.initBody(position)
-    }
-  }
-
-  _initCourse () {
-    for (const [index, player] of Array.from(this._players.values()).entries()) {
-      const position = (settings.startPositions[index] || this._grid.randomGridPosition)
-
-      this._actions.set(player.id, new Map())
-
-      player.playing = true
-      player.grid = this._grid
+      player.course = this._course
       player.initBody(position)
     }
   }
@@ -225,6 +209,19 @@ class GameRound extends EventEmitter {
     }
   }
 
+  _createFruit () {
+    const position = this._course.randomGridPosition
+    const fruit = new Fruit(position)
+
+    this._fruits.set(fruit.id, fruit)
+    this._course.occupyGridSquare(fruit)
+  }
+
+  _removeFruit (fruit) {
+    this._fruits.delete(fruit.id)
+    this._course.removeObjectFromGrid(fruit)
+  }
+
   _handleDecideWinner () {
     const playersAlive = (Array.from(this._players.values()).filter(player => player.alive))
     const playersDead = (Array.from(this._players.values()).filter(player => !player.alive))
@@ -246,7 +243,7 @@ class GameRound extends EventEmitter {
     function detectPlayerWithWorldBoundsCollision () {
       // Player to world bounds collision
       for (const player of Array.from(this._players.values()).filter(player => player.alive && !player.idle)) {
-        const collision = this._collisionHandler.playerWithWorldBoundsCollision(player)
+        const collision = this._course.playerWithWorldBoundsCollision(player)
 
         if (collision) {
           collidingPlayers.push(player)
@@ -256,7 +253,7 @@ class GameRound extends EventEmitter {
 
     function detectPlayerWithGameObjectCollision () {
       for (const player of Array.from(this._players.values()).filter(player => player.alive && !player.idle)) {
-        const collision = this._collisionHandler.playerWithGameObjectCollision(player)
+        const collision = this._course.playerWithGameObjectCollision(player)
 
         if (!collision) {
           return
