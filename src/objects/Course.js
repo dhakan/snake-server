@@ -11,11 +11,11 @@ class Course {
     this._collisionHandler = new CollisionHandler(this._grid)
     this._walls = []
 
-    this._initializeWalls(config.course)
+    this._initializeWalls(config.course.walls)
   }
 
   _initializeWalls (data) {
-    for (const item of data.walls) {
+    for (const item of data) {
       const wall = new Wall({
         x: item.x,
         y: item.y

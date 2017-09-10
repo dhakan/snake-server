@@ -20,7 +20,13 @@ const CourseFactory = Factory.define('course', Course)
       },
       startPositions: []
     },
-    walls: []
+    walls: [{
+      x: 50,
+      y: 50
+    }, {
+      x: 100,
+      y: 100
+    }]
   })
 
 const PlayerFactory = Factory.define('player', Player)

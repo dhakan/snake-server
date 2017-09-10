@@ -8,7 +8,7 @@ const Room = require('./objects/Room')
 
 const PORT = process.env.PORT || 3000
 
-loadCourses()
+loadCourses('courses')
   .then(courses => {
     const networkHandler = new NetworkHandler(io)
     const room = new Room({ // eslint-disable-line no-unused-vars

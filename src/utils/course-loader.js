@@ -4,10 +4,10 @@ const readDirAsync = promisify(fs.readdir)
 const readFileAsync = promisify(fs.readFile)
 const logger = require('./logger')
 
-const loadCourses = () => {
+const loadCourses = (courseDir) => {
   const courses = []
 
-  return readDirAsync('courses')
+  return readDirAsync(courseDir)
     .then(courseFilenames => {
       const promises = []
 
