@@ -128,7 +128,6 @@ class GameRound extends EventEmitter {
 
   _initPlayers () {
     for (const [index, player] of Array.from(this._players.values()).entries()) {
-      // const position = (settings.startPositions[index] || this._course.randomGridPosition)
       const position = this._course.getStartPosition(index)
 
       this._actions.set(player.id, new Map())

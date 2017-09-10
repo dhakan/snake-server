@@ -20,19 +20,19 @@ class InverseDirectionAction extends Action {
     let direction = this._player.direction
 
         // Divided by horizontal walls
-    if (tail.y === settings.world.HEIGHT - settings.GRID_SIZE &&
+    if (tail.y === this._player.course.settings.world.height - settings.GRID_SIZE &&
             tailMinusOne.y === 0) {
       direction = settings.playerActions.UP
-    } else if (tailMinusOne.y === settings.world.HEIGHT - settings.GRID_SIZE &&
+    } else if (tailMinusOne.y === this._player.course.settings.world.height - settings.GRID_SIZE &&
             tail.y === 0) {
       direction = settings.playerActions.DOWN
     }
 
         // Divided by vertical walls
-    if (tail.x === settings.world.WIDTH - settings.GRID_SIZE &&
+    if (tail.x === this._player.course.settings.world.width - settings.GRID_SIZE &&
             tailMinusOne.x === 0) {
       direction = settings.playerActions.LEFT
-    } else if (tailMinusOne.x === settings.world.WIDTH - settings.GRID_SIZE &&
+    } else if (tailMinusOne.x === this._player.course.settings.world.width - settings.GRID_SIZE &&
             tail.x === 0) {
       direction = settings.playerActions.RIGHT
     }

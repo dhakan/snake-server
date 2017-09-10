@@ -102,6 +102,10 @@ class Player {
     this._course = newValue
   }
 
+  get course () {
+    return this._course
+  }
+
   set bodyPartsYetToBeBuilt (newValue) {
     this._bodyPartsYetToBeBuilt = this._bodyPartsYetToBeBuilt + newValue
   }
