@@ -10,17 +10,24 @@ class Fruit extends GameObject {
   generateRandomValue () {
     const num = Math.random()
 
-    if (num < 0.7)
+    if (num < 0.33)
       return 1
-    else if (num < 0.8)
+    else if (num < 0.66)
       return 2
-    else if (num < 0.95)
+    else if (num < 1)
       return 3
-    else return 4
   }
 
   get value () {
     return this._value
+  }
+
+  get serialized () {
+    return {
+      id: this._id,
+      position: this.position,
+      value: this.value
+    }
   }
 
 }
