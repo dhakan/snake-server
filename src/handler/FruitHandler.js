@@ -5,11 +5,10 @@ class FruitHandler {
   constructor (grid) {
     this._grid = grid
     this._fruits = new Map()
-    this._maximumConcurrentFruits = settings.MAXIMUM_CONCURRENT_FRUITS
 
-    let intervalId = setInterval(() => {
+    setInterval(() => {
 
-      if (this.length < this._maximumConcurrentFruits) {
+      if (this.length < settings.MAXIMUM_CONCURRENT_FRUITS) {
         this.spawnFruit()
       }
 

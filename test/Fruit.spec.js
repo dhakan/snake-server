@@ -5,7 +5,7 @@ const Fruit = require('../src/objects/Fruit')
 const Grid = require('../src/objects/Grid')
 const FruitHandler = require('../src/handler/FruitHandler')
 
-function prepare() {
+function prepare () {
 
   const grid = new Grid()
   const fruitHandler = new FruitHandler(grid)
@@ -16,25 +16,19 @@ function prepare() {
 describe('Fruit', () => {
   beforeEach(() => {
     this.fruitHandler = prepare()
-  })
-
-  describe('spawnFruit', () => {
-    it('should create a new fruit in a random gridSquare', () => {
-
-      this.fruitHandler.spawnFruit()
-
-      expect(this.fruitHandler.fruits.size).to.deep.equal(1)
-    })
+    this.fruit = this.fruitHandler.spawnFruit()
   })
 
   describe('removeFruit', () => {
-    it('should create a new fruit and then remove it', () => {
+    it('should remove one fruit', () => {
 
-      const fruit = this.fruitHandler.spawnFruit()
+      const count = this.fruitHandler.fruits.size
 
-      this.fruitHandler.removeFruit(fruit)
+      expect(this.fruitHandler.fruits.size).to.deep.equal(count)
 
-      expect(this.fruitHandler.fruits.size).to.deep.equal(0)
+      this.fruitHandler.removeFruit(this.fruit)
+
+      expect(this.fruitHandler.fruits.size).to.deep.equal(count - 1)
     })
   })
 })
