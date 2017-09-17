@@ -26,7 +26,9 @@ class GameRound extends EventEmitter {
     })
 
     this._actions = new Map()
-    this._fruitHandler = new FruitHandler(this._grid)
+    this._fruitHandler = new FruitHandler({
+      course: this._course
+    })
 
     this._gameLoopTimerId = null
     this._countdownTimerId = null
@@ -206,19 +208,6 @@ class GameRound extends EventEmitter {
     for (const player of Array.from(this._players.values()).filter(player => player.alive && !player.idle)) {
       player.move()
     }
-  }
-
-  _createFruit () {
-    const position = this._course.randomGridPosition
-    const fruit = new Fruit(position)
-
-    this._fruits.set(fruit.id, fruit)
-    this._course.occupyGridSquare(fruit)
-  }
-
-  _removeFruit (fruit) {
-    this._fruits.delete(fruit.id)
-    this._course.removeObjectFromGrid(fruit)
   }
 
   _handleDecideWinner () {

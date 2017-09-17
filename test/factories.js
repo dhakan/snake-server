@@ -5,6 +5,7 @@ const MockNetworkHandler = require('./mocks/NetworkHandler')
 const Room = proxyquire('../src/objects/Room', {'./GameRound': GameRoundMock})
 const Course = require('../src/objects/Course')
 const Player = require('../src/objects/Player')
+const FruitHandler = require('../src/handler/FruitHandler')
 
 const RoomFactory = Factory.define('room', Room)
   .attr('courses', [])
@@ -32,8 +33,12 @@ const CourseFactory = Factory.define('course', Course)
 const PlayerFactory = Factory.define('player', Player)
   .attr('course', CourseFactory.build())
 
+const FruitHandlerFactory = Factory.define('fruitHandler', FruitHandler)
+  .attr('course', CourseFactory.build())
+
 module.exports = {
   RoomFactory,
   CourseFactory,
-  PlayerFactory
+  PlayerFactory,
+  FruitHandlerFactory
 }
