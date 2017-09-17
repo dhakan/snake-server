@@ -1,12 +1,12 @@
 const uuid = require('uuid/v4')
 const EventEmitter = require('events').EventEmitter
-
 const settings = require('../utils/settings')
 const NetworkHandler = require('../handler/NetworkHandler')
+const FruitHandler = require('../handler/FruitHandler')
 const CollisionHandler = require('../handler/CollisionHandler')
 const Grid = require('./Grid')
-const Fruit = require('./Fruit')
 const BodyPart = require('./BodyPart')
+const Fruit = require('./Fruit')
 const ChangeDirectionAction = require('../actions/ChangeDirectionAction')
 const InverseDirectionAction = require('../actions/InverseDirectionAction')
 
@@ -17,13 +17,14 @@ class GameRound extends EventEmitter {
     super()
     this._id = uuid()
     this._networkHandler = networkHandler
+
     this._players = new Map(players)
 
     this._grid = new Grid()
     this._collisionHandler = new CollisionHandler(this._grid)
 
     this._actions = new Map()
-    this._fruits = new Map()
+    this._fruitHandler = new FruitHandler(this._grid)
 
     this._gameLoopTimerId = null
     this._countdownTimerId = null
@@ -60,7 +61,7 @@ class GameRound extends EventEmitter {
       players: Array.from(this._players.values())
                 .filter(player => player.alive)
                 .map(player => player.serialized),
-      fruits: Array.from(this._fruits.values()).map(fruit => fruit.serialized)
+      fruits: Array.from(this._fruitHandler.fruits.values()).map(fruit => fruit.serialized)
     }
 
     return state
@@ -140,8 +141,6 @@ class GameRound extends EventEmitter {
 
     this._addListeners()
 
-    this._createFruit()
-
     this._gameLoopTimerId = setInterval(() => {
       this._handleExecuteActions()
       this._movePlayers()
@@ -205,19 +204,6 @@ class GameRound extends EventEmitter {
     }
   }
 
-  _createFruit () {
-    const position = this._grid.randomGridPosition
-    const fruit = new Fruit(position)
-
-    this._fruits.set(fruit.id, fruit)
-    this._grid.occupyGridSquare(fruit)
-  }
-
-  _removeFruit (fruit) {
-    this._fruits.delete(fruit.id)
-    this._grid.removeObjectFromGrid(fruit)
-  }
-
   _handleDecideWinner () {
     const playersAlive = (Array.from(this._players.values()).filter(player => player.alive))
     const playersDead = (Array.from(this._players.values()).filter(player => !player.alive))
@@ -258,9 +244,8 @@ class GameRound extends EventEmitter {
         for (const gameObject of collision) {
                     // Player to fruit
           if (gameObject instanceof Fruit) {
-            this._removeFruit(gameObject)
-            this._createFruit()
-            player.bodyPartsYetToBeBuilt = 1
+            this._fruitHandler.removeFruit(gameObject)
+            player.bodyPartsYetToBeBuilt = gameObject.value
                         // Player to body part
           } else if (gameObject instanceof BodyPart) {
             collidingPlayers.push(player)
