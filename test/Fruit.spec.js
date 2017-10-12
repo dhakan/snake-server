@@ -1,19 +1,11 @@
 const chai = require('chai')
 const expect = chai.expect
 
-const Grid = require('../src/objects/Grid')
-const FruitHandler = require('../src/handler/FruitHandler')
-
-function prepare () {
-  const grid = new Grid()
-  const fruitHandler = new FruitHandler(grid)
-
-  return fruitHandler
-}
+const factories = require('./factories')
 
 describe('Fruit', () => {
   beforeEach(() => {
-    this.fruitHandler = prepare()
+    this.fruitHandler = factories.FruitHandlerFactory.build()
     this.fruit = this.fruitHandler.spawnFruit()
   })
 

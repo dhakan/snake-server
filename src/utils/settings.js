@@ -2,7 +2,6 @@ const DIRECTION_ACTION = 'direction-action'
 const INVERSE_ACTION = 'inverse-action'
 
 const settings = {
-  BACKGROUND_COLOR: '#000000',
   GRID_SIZE: 20,
   GAME_LOOP_TIMER: 100,
   GAME_ROUND_COUNTDOWN_TIMER: 500,
@@ -12,16 +11,10 @@ const settings = {
   MAXIMUM_CONCURRENT_FRUITS: 3,
   FRUIT_SPAWN_INTERVAL: 1000,
   START_POSITION_OFFSET: 100,
-  startPositions: [],
   modes: {
     FREE_MOVEMENT: 'free-movement',
     BLOCKED_BY_WORLD_BOUNDS: 'blocked-by-world-bounds'
   },
-  world: {
-    WIDTH: 800,
-    HEIGHT: 400
-  },
-
   playerActions: {
     UP: {
       type: DIRECTION_ACTION,
@@ -67,20 +60,6 @@ const settings = {
     CONNECT: 'connect'
   }
 }
-
-settings.startPositions = [{
-  x: settings.START_POSITION_OFFSET,
-  y: settings.START_POSITION_OFFSET
-}, {
-  x: settings.world.WIDTH - settings.START_POSITION_OFFSET,
-  y: settings.world.HEIGHT - settings.START_POSITION_OFFSET
-}, {
-  x: settings.world.WIDTH - settings.START_POSITION_OFFSET,
-  y: settings.START_POSITION_OFFSET
-}, {
-  x: settings.START_POSITION_OFFSET,
-  y: settings.world.HEIGHT - settings.START_POSITION_OFFSET
-}]
 
 const playerActions = settings.playerActions
 

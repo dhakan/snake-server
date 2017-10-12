@@ -2,8 +2,8 @@ const Fruit = require('../objects/Fruit')
 const settings = require('../utils/settings')
 
 class FruitHandler {
-  constructor (grid) {
-    this._grid = grid
+  constructor (config) {
+    this._course = config.course
     this._fruits = new Map()
 
     setInterval(() => {
@@ -14,18 +14,18 @@ class FruitHandler {
   }
 
   spawnFruit () {
-    const position = this._grid.randomGridPosition
+    const position = this._course.randomGridPosition
     const fruit = new Fruit(position)
 
     this._fruits.set(fruit.id, fruit)
-    this._grid.occupyGridSquare(fruit)
+    this._course.occupyGridSquare(fruit)
 
     return fruit
   }
 
   removeFruit (fruit) {
     this._fruits.delete(fruit.id)
-    this._grid.removeObjectFromGrid(fruit)
+    this._course.removeObjectFromGrid(fruit)
   }
 
   get fruits () {

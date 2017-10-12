@@ -2,25 +2,28 @@ const chai = require('chai')
 const expect = chai.expect
 
 const settings = require('../src/utils/settings')
-const Player = require('../src/objects/Player')
 const BodyPart = require('../src/objects/BodyPart')
-const Grid = require('../src/objects/Grid')
+const factories = require('./factories')
 
 function createPlayer (numberOfBodyParts = 2) {
   settings.NUMBER_OF_INITIAL_BODY_PARTS = numberOfBodyParts
 
-  const player = new Player({
-    grid: new Grid()
-  })
-
-  player.initBody(settings.startPositions[0])
+  const player = factories.PlayerFactory.build()
 
   return player
 }
 
 describe('Player', () => {
   beforeEach(() => {
+    this.position = {
+      x: 50,
+      y: 50
+    }
+
     this.player = createPlayer()
+
+    // TODO why is this needed here? Think about better architecture?
+    this.player.initBody(this.position)
   })
 
   describe('move', () => {
@@ -49,12 +52,12 @@ describe('Player', () => {
 
       expect(this.player.bodyParts.length).to.equal(0)
 
-      this.player.expandBody(settings.startPositions[0])
+      this.player.expandBody(this.position)
 
       expect(this.player.bodyParts.length).to.equal(1)
       expect(this.player.bodyParts[0].type).to.equal(BodyPart.HEAD)
 
-      this.player.expandBody(settings.startPositions[0])
+      this.player.expandBody(this.position)
 
       expect(this.player.bodyParts[1].type).to.equal(BodyPart.BODY)
     })

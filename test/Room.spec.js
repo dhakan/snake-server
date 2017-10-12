@@ -1,18 +1,16 @@
 const chai = require('chai')
 const expect = chai.expect
 const sinon = require('sinon')
-const proxyquire = require('proxyquire')
-
+const factories = require('./factories')
 const GameRoundMock = require('./mocks/GameRound')
 
 const settings = require('../src/utils/settings')
-const Room = proxyquire('../src/objects/Room', {'./GameRound': GameRoundMock})
 
 describe('Room', () => {
   describe('create game round', () => {
     beforeEach(() => {
       settings.REQUIRED_NUMBER_OF_PLAYERS_FOR_GAME_ROUND = 2
-      this.room = new Room()
+      this.room = factories.RoomFactory.build()
     })
 
     // TODO fix this stupid solution, player color should not be an issue when testing the room

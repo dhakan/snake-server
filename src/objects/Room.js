@@ -6,13 +6,14 @@ const Player = require('./Player')
 const GameRound = require('./GameRound')
 
 class Room {
-  constructor (networkHandler) {
+  constructor (config) {
     this._id = uuid()
     this._players = new Map()
 
-    this._gameRound = null
+    this._unloadedCourses = config.courses
+    this._networkHandler = config.networkHandler
 
-    this._networkHandler = networkHandler
+    this._gameRound = null
 
     if (this._networkHandler) {
       this._attachNetworkListeners()
@@ -31,6 +32,13 @@ class Room {
     }
 
     return state
+  }
+
+  get randomCourse () {
+    const randomIndex = Math.floor(Math.random() * this._unloadedCourses.length)
+    const course = this._unloadedCourses[randomIndex]
+
+    return course
   }
 
   _attachNetworkListeners () {
@@ -68,7 +76,11 @@ class Room {
     const gameRoundIsNotRunning = !(this._gameRound && this._gameRound.isRunning)
 
     if (numberOfPlayersRequiredAreEnough && allPlayersLoaded && gameRoundIsNotRunning) {
-      this._gameRound = new GameRound(this._networkHandler, this._players)
+      this._gameRound = new GameRound({
+        networkHandler: this._networkHandler,
+        players: this._players,
+        course: this.randomCourse
+      })
       this._gameRound.once(GameRound.events.WINNER_DECIDED, winners => {
         // TODO change this recursive behaviour(it never ends)
         this._handleCreateGameRound()

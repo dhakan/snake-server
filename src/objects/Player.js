@@ -9,7 +9,7 @@ class Player {
     this._bodyParts = []
     this._direction = config.direction
     this._alive = true
-    this._grid = config.grid
+    this._course = config.course
     this._ready = false
     this._playing = false
     this._bodyPartsYetToBeBuilt = 0
@@ -52,7 +52,7 @@ class Player {
   }
 
   get isRightOfBounds () {
-    return this.head.x > settings.world.WIDTH - settings.GRID_SIZE
+    return this.head.x > this._course.settings.world.width - settings.GRID_SIZE
   }
 
   get isAboveBounds () {
@@ -60,7 +60,7 @@ class Player {
   }
 
   get isBelowBounds () {
-    return this.head.y > settings.world.HEIGHT - settings.GRID_SIZE
+    return this.head.y > this._course.settings.world.height - settings.GRID_SIZE
   }
 
   get isOutsideOfBounds () {
@@ -98,8 +98,12 @@ class Player {
     }
   }
 
-  set grid (newValue) {
-    this._grid = newValue
+  set course (newValue) {
+    this._course = newValue
+  }
+
+  get course () {
+    return this._course
   }
 
   set bodyPartsYetToBeBuilt (newValue) {
@@ -108,12 +112,12 @@ class Player {
 
   _handleWarpThroughWall (nextPosition) {
     if (nextPosition.x < 0) {
-      nextPosition.x = settings.world.WIDTH - settings.GRID_SIZE
-    } else if (nextPosition.x > settings.world.WIDTH - settings.GRID_SIZE) {
+      nextPosition.x = this._course.settings.world.width - settings.GRID_SIZE
+    } else if (nextPosition.x > this._course.settings.world.width - settings.GRID_SIZE) {
       nextPosition.x = 0
     } else if (nextPosition.y < 0) {
-      nextPosition.y = settings.world.HEIGHT - settings.GRID_SIZE
-    } else if (nextPosition.y > settings.world.HEIGHT - settings.GRID_SIZE) {
+      nextPosition.y = this._course.settings.world.height - settings.GRID_SIZE
+    } else if (nextPosition.y > this._course.settings.world.height - settings.GRID_SIZE) {
       nextPosition.y = 0
     }
 
@@ -153,12 +157,12 @@ class Player {
     const oldPosition = this.head.position
     const nextPosition = this._getNextPosition(this.head)
 
-    this._grid.removeObjectFromGrid(this.head)
+    this._course.removeObjectFromGrid(this.head)
 
     this.head.x = nextPosition.x
     this.head.y = nextPosition.y
 
-    this._grid.occupyGridSquare(this.head)
+    this._course.occupyGridSquare(this.head)
 
     return oldPosition
   }
@@ -168,7 +172,7 @@ class Player {
     const tailOldPosition = tail.position
     const nextPosition = this._getNextPosition(this.head)
 
-    this._grid.removeObjectFromGrid(tail)
+    this._course.removeObjectFromGrid(tail)
 
     this.head.type = BodyPart.BODY
 
@@ -179,7 +183,7 @@ class Player {
     tail.x = nextPosition.x
     tail.y = nextPosition.y
 
-    this._grid.occupyGridSquare(tail)
+    this._course.occupyGridSquare(tail)
 
     return tailOldPosition
   }
@@ -192,7 +196,7 @@ class Player {
 
   kill () {
     this._alive = false
-    this._bodyParts.forEach(bodyPart => this._grid.removeObjectFromGrid(bodyPart))
+    this._bodyParts.forEach(bodyPart => this._course.removeObjectFromGrid(bodyPart))
     this._bodyParts = []
   }
 
@@ -202,13 +206,13 @@ class Player {
 
     this._bodyParts.push(newBodyPart)
 
-    this._grid.occupyGridSquare(newBodyPart)
+    this._course.occupyGridSquare(newBodyPart)
   }
 
   reduceBody () {
     const head = this._bodyParts.shift()
 
-    this._grid.removeObjectFromGrid(head)
+    this._course.removeObjectFromGrid(head)
 
     if (this._bodyParts.length) {
       this.head.type = BodyPart.HEAD
@@ -239,7 +243,7 @@ class Player {
   reset () {
     this._bodyParts = []
     this._alive = true
-    this._grid = null
+    this._course = null
     this._playing = false
     this._bodyPartsYetToBeBuilt = 0
     this._direction = null

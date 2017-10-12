@@ -3,9 +3,9 @@ const EventEmitter = require('events').EventEmitter
 const settings = require('../utils/settings')
 const NetworkHandler = require('../handler/NetworkHandler')
 const FruitHandler = require('../handler/FruitHandler')
-const CollisionHandler = require('../handler/CollisionHandler')
-const Grid = require('./Grid')
 const BodyPart = require('./BodyPart')
+const Course = require('./Course')
+const Wall = require('./Wall')
 const Fruit = require('./Fruit')
 const ChangeDirectionAction = require('../actions/ChangeDirectionAction')
 const InverseDirectionAction = require('../actions/InverseDirectionAction')
@@ -13,18 +13,20 @@ const InverseDirectionAction = require('../actions/InverseDirectionAction')
 const logger = require('../utils/logger')
 
 class GameRound extends EventEmitter {
-  constructor (networkHandler, players) {
+  constructor (config) {
     super()
     this._id = uuid()
-    this._networkHandler = networkHandler
+    this._networkHandler = config.networkHandler
+    this._players = new Map(config.players)
 
-    this._players = new Map(players)
-
-    this._grid = new Grid()
-    this._collisionHandler = new CollisionHandler(this._grid)
+    this._course = new Course({
+      course: config.course
+    })
 
     this._actions = new Map()
-    this._fruitHandler = new FruitHandler(this._grid)
+    this._fruitHandler = new FruitHandler({
+      course: this._course
+    })
 
     this._gameLoopTimerId = null
     this._countdownTimerId = null
@@ -48,20 +50,22 @@ class GameRound extends EventEmitter {
     const initialState = {
       id: this.id,
       players: Array.from(this._players.values())
-                .map(player => player.serialized)
+        .map(player => player.serialized),
+      course: this._course.serialized
     }
 
     return initialState
   }
 
-    // TODO rename to gameState
+  // TODO rename to gameState
   get state () {
     const state = {
       id: this.id,
       players: Array.from(this._players.values())
                 .filter(player => player.alive)
                 .map(player => player.serialized),
-      fruits: Array.from(this._fruitHandler.fruits.values()).map(fruit => fruit.serialized)
+      fruits: Array.from(this._fruitHandler.fruits.values()).map(fruit => fruit.serialized),
+      walls: this._course.walls.map(wall => wall.serialized)
     }
 
     return state
@@ -124,12 +128,12 @@ class GameRound extends EventEmitter {
 
   _initPlayers () {
     for (const [index, player] of Array.from(this._players.values()).entries()) {
-      const position = (settings.startPositions[index] || this._grid.randomGridPosition)
+      const position = this._course.getStartPosition(index)
 
       this._actions.set(player.id, new Map())
 
       player.playing = true
-      player.grid = this._grid
+      player.course = this._course
       player.initBody(position)
     }
   }
@@ -157,7 +161,7 @@ class GameRound extends EventEmitter {
   _onPlayerAction (payload) {
     const player = this._players.get(payload.id)
 
-        // TODO should this function even run when a player not in this GameRound submits a player action?
+    // TODO should this function even run when a player not in this GameRound submits a player action?
     if (!player) {
       return
     }
@@ -223,9 +227,9 @@ class GameRound extends EventEmitter {
 
   _detectCollisions () {
     function detectPlayerWithWorldBoundsCollision () {
-            // Player to world bounds collision
+      // Player to world bounds collision
       for (const player of Array.from(this._players.values()).filter(player => player.alive && !player.idle)) {
-        const collision = this._collisionHandler.playerWithWorldBoundsCollision(player)
+        const collision = this._course.playerWithWorldBoundsCollision(player)
 
         if (collision) {
           collidingPlayers.push(player)
@@ -235,19 +239,20 @@ class GameRound extends EventEmitter {
 
     function detectPlayerWithGameObjectCollision () {
       for (const player of Array.from(this._players.values()).filter(player => player.alive && !player.idle)) {
-        const collision = this._collisionHandler.playerWithGameObjectCollision(player)
+        const collision = this._course.playerWithGameObjectCollision(player)
 
         if (!collision) {
           return
         }
 
         for (const gameObject of collision) {
-                    // Player to fruit
+          // Player to fruit
           if (gameObject instanceof Fruit) {
             this._fruitHandler.removeFruit(gameObject)
             player.bodyPartsYetToBeBuilt = gameObject.value
-                        // Player to body part
           } else if (gameObject instanceof BodyPart) {
+            collidingPlayers.push(player)
+          } else if (gameObject instanceof Wall) {
             collidingPlayers.push(player)
           }
         }

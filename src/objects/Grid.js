@@ -2,10 +2,10 @@ const settings = require('../utils/settings')
 const GridSquare = require('./GridSquare')
 
 class Grid {
-  constructor () {
+  constructor (config) {
     this._grid = new Map()
 
-    this._initializeGrid()
+    this._initializeGrid(config.settings)
   }
 
   get freeGridSquares () {
@@ -23,11 +23,13 @@ class Grid {
     return randomGridSquare.location
   }
 
-  _initializeGrid () {
+  _initializeGrid (courseSettings) {
     const gridSize = settings.GRID_SIZE
+    const worldWidth = (courseSettings.world.width || settings.world.WIDTH)
+    const worldHeight = (courseSettings.world.height || settings.world.HEIGHT)
 
-    for (let x = 0; x <= settings.world.WIDTH - gridSize; x = x + gridSize) {
-      for (let y = 0; y <= settings.world.HEIGHT - gridSize; y = y + gridSize) {
+    for (let x = 0; x <= worldWidth - gridSize; x = x + gridSize) {
+      for (let y = 0; y <= worldHeight - gridSize; y = y + gridSize) {
         const location = {
           x: x,
           y: y
