@@ -1,9 +1,9 @@
 {
   "settings": {
-    "backgroundColor": "#A5E9DB",
+    "backgroundColor": "black",
     "world": {
-      "width": 400,
-      "height": 200
+      "width": 1050,
+      "height": 540
     },
     "startPositions": []
   },

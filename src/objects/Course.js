@@ -46,7 +46,8 @@ class Course {
   }
 
   getStartPosition (playerIndex) {
-    return this._settings.startPositions[playerIndex] || this.randomGridPosition
+    // return this._settings.startPositions[playerIndex] || this.randomGridPosition
+    return this.randomGridPosition
   }
 
   occupyGridSquare (gameObject) {
