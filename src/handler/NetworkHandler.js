@@ -49,6 +49,18 @@ class NetworkHandler extends EventEmitter {
     })
   }
 
+  emitFruitCollected() {
+    this._io.emit(settings.messages.FRUIT_COLLECTED)
+  }
+
+  emitPlayerDied() {
+    this._io.emit(settings.messages.PLAYER_DIED)
+  }
+  
+  emitPlayerReduction() {
+    this._io.emit(settings.messages.PLAYER_REDUCTION)
+  }
+
   emitRoomState (roomState) {
     this._io.emit(settings.messages.ROOM_STATE, roomState)
   }

@@ -3,7 +3,7 @@ const INVERSE_ACTION = 'inverse-action'
 
 const settings = {
   GRID_SIZE: 30,
-  GAME_LOOP_TIMER: 70,
+  GAME_LOOP_TIMER: 80,
   GAME_ROUND_COUNTDOWN_TIMER: 500,
   COUNTDOWN_THRESHOLD: 3,
   // REQUIRED_NUMBER_OF_PLAYERS_FOR_GAME_ROUND: 1,
@@ -50,6 +50,9 @@ const settings = {
     GAME_ROUND_INITIATED: 'game-round-initiated',
     GAME_ROUND_COUNTDOWN: 'game-round-countdown',
     GAME_STATE: 'game-state',
+    FRUIT_COLLECTED: 'fruit-collected',
+    PLAYER_DIED: 'player-died',
+    PLAYER_REDUCTION: 'player-reduction',
 
         // Sent from client
     CLIENT_LOADED: 'client-loaded',

@@ -269,6 +269,7 @@ class Room {
           if (gameObject instanceof Fruit) {
             this._fruitHandler.removeFruit(gameObject);
             player.bodyPartsYetToBeBuilt = gameObject.value;
+            this._networkHandler.emitFruitCollected(player);
           } else if (gameObject instanceof BodyPart) {
             collidingPlayers.push(player);
           } else if (gameObject instanceof Wall) {
@@ -287,8 +288,10 @@ class Room {
 
     for (const player of collidingPlayers) {
       player.reduceBody();
+      this._networkHandler.emitPlayerReduction();
 
       if (!player.alive) {
+        this._networkHandler.emitPlayerDied();
         this._initPlayer(player)
       }
     }

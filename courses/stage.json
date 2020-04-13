@@ -1,6 +1,6 @@
 {
   "settings": {
-    "backgroundColor": "black",
+    "backgroundColor": "#000",
     "world": {
       "width": 1050,
       "height": 540
