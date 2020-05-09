@@ -244,17 +244,16 @@ class Player {
     this._bodyParts = []
     this._alive = true
     this._course = null
-    this._playing = false
     this._bodyPartsYetToBeBuilt = 0
     this._direction = null
   }
 }
 
 Player.colors = [
-  new PlayerColor('#FF0000'), // Red
-  new PlayerColor('#0000FF'), // Blue
-  new PlayerColor('#00FF00'), // Green
-  new PlayerColor('#FFFF00') // Yellow
+  new PlayerColor('#ffe900'),
+  new PlayerColor('#e53d00'),
+  // new PlayerColor('#00FF00'), // Green
+  // new PlayerColor('#FFFF00') // Yellow
 ]
 
 module.exports = Player

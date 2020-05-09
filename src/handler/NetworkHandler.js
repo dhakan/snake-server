@@ -14,7 +14,7 @@ class NetworkHandler extends EventEmitter {
   }
 
   _onConnection (socket) {
-    logger.info('Player connected', socket.id)
+    logger.info('NetworkHandler: Player connected', socket.id)
 
     socket.emit(settings.messages.YOU_CONNECTED, {
       id: socket.id,
@@ -24,7 +24,7 @@ class NetworkHandler extends EventEmitter {
     this.emit(NetworkHandler.events.CONNECT, socket.id)
 
     socket.on(settings.messages.CLIENT_LOADED, () => {
-      logger.info('Player loaded phaser', socket.id)
+      logger.info('NetworkHandler: Player loaded phaser', socket.id)
       this.emit(NetworkHandler.events.CLIENT_LOADED, socket.id)
     })
 
@@ -38,7 +38,7 @@ class NetworkHandler extends EventEmitter {
   }
 
   _onDisconnection (socket) {
-    logger.info('Player disconnected', socket.id)
+    logger.info('NetworkHandler: Player disconnected', socket.id)
     this.emit(NetworkHandler.events.DISCONNECT, socket.id)
   }
 
@@ -47,6 +47,18 @@ class NetworkHandler extends EventEmitter {
       id: socket.id,
       action: payload
     })
+  }
+
+  emitFruitCollected() {
+    this._io.emit(settings.messages.FRUIT_COLLECTED)
+  }
+
+  emitPlayerDied() {
+    this._io.emit(settings.messages.PLAYER_DIED)
+  }
+  
+  emitPlayerReduction() {
+    this._io.emit(settings.messages.PLAYER_REDUCTION)
   }
 
   emitRoomState (roomState) {

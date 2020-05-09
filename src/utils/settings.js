@@ -2,11 +2,11 @@ const DIRECTION_ACTION = 'direction-action'
 const INVERSE_ACTION = 'inverse-action'
 
 const settings = {
-  GRID_SIZE: 20,
-  GAME_LOOP_TIMER: 100,
+  GRID_SIZE: 30,
+  GAME_LOOP_TIMER: 80,
   GAME_ROUND_COUNTDOWN_TIMER: 500,
   COUNTDOWN_THRESHOLD: 3,
-  REQUIRED_NUMBER_OF_PLAYERS_FOR_GAME_ROUND: 2,
+  // REQUIRED_NUMBER_OF_PLAYERS_FOR_GAME_ROUND: 1,
   NUMBER_OF_INITIAL_BODY_PARTS: 3,
   MAXIMUM_CONCURRENT_FRUITS: 3,
   FRUIT_SPAWN_INTERVAL: 1000,
@@ -50,6 +50,9 @@ const settings = {
     GAME_ROUND_INITIATED: 'game-round-initiated',
     GAME_ROUND_COUNTDOWN: 'game-round-countdown',
     GAME_STATE: 'game-state',
+    FRUIT_COLLECTED: 'fruit-collected',
+    PLAYER_DIED: 'player-died',
+    PLAYER_REDUCTION: 'player-reduction',
 
         // Sent from client
     CLIENT_LOADED: 'client-loaded',
